@@ -9,18 +9,11 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --black: #000000;
-    --white: #FFFFFF;
-    --gray-1: #F5F5F7;
-    --gray-4: #86868B;
-    --gray-5: #6E6E73;
-    --gray-6: #3A3A3C;
-    --gray-7: #2C2C2E;
-    --gray-8: #1C1C1E;
     --apple-blue: #0071E3;
     --apple-blue-hover: #0077ED;
     --text-primary: #F5F5F7;
-    --text-secondary: #86868B;
-    --text-tertiary: #48484A;
+    --text-secondary: #AEAEB2;
+    --text-tertiary: #6E6E73;
     --border: rgba(255,255,255,0.08);
     --border-light: rgba(255,255,255,0.12);
     --surface: #1C1C1E;
@@ -31,6 +24,7 @@
   html { scroll-behavior: smooth; }
   body { font-family: var(--sans); background: var(--black); color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
+  /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
@@ -40,13 +34,29 @@
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 1px solid var(--border);
   }
-  .nav-logo { font-size: 13px; font-weight: 400; color: var(--text-secondary); letter-spacing: 0.01em; }
   .nav-links { display: flex; gap: 2rem; }
   .nav-links a { font-size: 13px; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
   .nav-links a:hover { color: var(--text-primary); }
+  .nav-right { display: flex; align-items: center; gap: 1.25rem; }
+  .lang-toggle {
+    display: flex; align-items: center;
+    background: var(--surface); border: 1px solid var(--border-light);
+    border-radius: 980px; overflow: hidden;
+    font-size: 12px; font-weight: 500;
+  }
+  .lang-btn {
+    padding: 5px 12px; cursor: pointer;
+    color: var(--text-tertiary);
+    border: none; background: transparent;
+    font-family: var(--sans); font-size: 12px; font-weight: 500;
+    transition: all 0.15s; letter-spacing: 0.02em;
+  }
+  .lang-btn.active { background: var(--apple-blue); color: #fff; border-radius: 980px; }
+  .lang-btn:hover:not(.active) { color: var(--text-primary); }
 
   .page-wrap { max-width: 1100px; margin: 0 auto; }
 
+  /* HERO */
   .hero {
     min-height: 100vh;
     display: grid; grid-template-columns: 1fr 280px;
@@ -55,30 +65,18 @@
   }
   .hero-tag { font-size: 12px; font-weight: 400; color: var(--apple-blue); letter-spacing: 0.04em; margin-bottom: 1.25rem; }
   .hero-name { font-size: clamp(2.5rem, 5vw, 4.2rem); font-weight: 600; line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 0.25rem; }
-  .hero-name .last { color: var(--gray-4); font-weight: 300; }
+  .hero-name .last { color: #86868B; font-weight: 300; }
   .hero-title { font-size: 13px; color: var(--text-secondary); letter-spacing: 0.02em; margin-bottom: 1.5rem; }
-  .hero-desc { max-width: 500px; font-size: 16px; font-weight: 300; color: rgba(245,245,247,0.6); line-height: 1.8; margin-bottom: 2rem; }
+  .hero-desc { max-width: 500px; font-size: 16px; font-weight: 300; color: rgba(245,245,247,0.65); line-height: 1.8; margin-bottom: 2rem; }
   .hero-stats { display: flex; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
   .stat-num { font-size: 1.8rem; font-weight: 600; color: var(--text-primary); line-height: 1; letter-spacing: -0.02em; }
   .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; letter-spacing: 0.03em; }
   .hero-cta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
-
   .hero-social { display: flex; gap: 10px; }
-  .social-link {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 34px; height: 34px;
-    border: 1px solid var(--border-light); border-radius: 8px;
-    color: var(--text-secondary); text-decoration: none; transition: all 0.15s;
-  }
+  .social-link { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border: 1px solid var(--border-light); border-radius: 8px; color: var(--text-secondary); text-decoration: none; transition: all 0.15s; }
   .social-link:hover { color: var(--text-primary); border-color: rgba(255,255,255,0.25); background: var(--surface); }
   .social-link svg { width: 14px; height: 14px; fill: currentColor; }
-
-  .photo-wrap {
-    width: 260px; height: 320px;
-    border-radius: 20px; overflow: hidden;
-    border: 1px solid var(--border-light);
-    position: relative;
-  }
+  .photo-wrap { width: 260px; height: 320px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-light); position: relative; }
   .photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; filter: grayscale(8%) contrast(1.04) brightness(0.97); }
   .photo-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 16px; background: linear-gradient(transparent, rgba(0,0,0,0.85)); }
   .photo-badge { display: inline-block; background: rgba(0,113,227,0.2); border: 1px solid rgba(0,113,227,0.4); border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 500; color: #63B3FF; letter-spacing: 0.04em; }
@@ -90,19 +88,26 @@
   .btn-outline:hover { background: var(--surface-2); border-color: rgba(255,255,255,0.2); }
 
   .section-wrap { border-top: 1px solid rgba(255,255,255,0.06); }
-  section { padding: 5rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+  section { padding: 6rem 2.5rem; max-width: 1100px; margin: 0 auto; }
   .section-eyebrow { font-size: 11px; font-weight: 500; color: var(--apple-blue); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.6rem; }
   .section-title { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 600; letter-spacing: -0.02em; color: var(--text-primary); margin-bottom: 0.4rem; }
   .section-subtitle { font-size: 16px; font-weight: 300; color: var(--text-secondary); margin-bottom: 3rem; }
 
-  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
-  .skill-card { background: var(--surface); padding: 1.5rem; transition: background 0.15s; }
+  /* SKILLS — 3x2 grid */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 18px; overflow: hidden;
+  }
+  .skill-card { background: var(--surface); padding: 2rem; transition: background 0.15s; }
   .skill-card:hover { background: var(--surface-2); }
-  .skill-icon { font-size: 10px; font-weight: 500; color: var(--apple-blue); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.6rem; }
-  .skill-name { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 0.6rem; }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-  .tag { font-size: 11px; padding: 3px 9px; background: var(--surface-3); color: var(--text-secondary); border-radius: 6px; border: 1px solid var(--border); }
+  .skill-icon { font-size: 10px; font-weight: 500; color: var(--apple-blue); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .skill-name { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 0.75rem; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 12px; padding: 4px 10px; background: var(--surface-3); color: var(--text-secondary); border-radius: 6px; border: 1px solid var(--border); }
 
+  /* PORTFOLIO */
   .employer-group { margin-bottom: 2.5rem; }
   .employer-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
   .employer-name { font-size: 12px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.04em; }
@@ -114,10 +119,11 @@
   .app-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; margin-bottom: 0.85rem; font-size: 10px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.03em; }
   .app-name { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
   .app-tech { font-size: 11px; color: var(--text-tertiary); margin-bottom: 0.6rem; }
-  .app-desc { font-size: 13px; font-weight: 300; color: rgba(245,245,247,0.5); line-height: 1.7; flex: 1; margin-bottom: 1rem; }
+  .app-desc { font-size: 13px; font-weight: 300; color: rgba(245,245,247,0.6); line-height: 1.7; flex: 1; margin-bottom: 1rem; }
   .app-link { font-size: 12px; color: var(--apple-blue); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: opacity 0.15s; }
   .app-link:hover { opacity: 0.75; }
 
+  /* EXPERIENCE */
   .exp-list { display: flex; flex-direction: column; }
   .exp-item { display: grid; grid-template-columns: 150px 1fr; gap: 0 2rem; padding: 1.75rem 0; border-bottom: 1px solid var(--border); position: relative; }
   .exp-item::after { content: ""; position: absolute; left: 145px; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.06); }
@@ -126,17 +132,28 @@
   .exp-current .exp-dot { background: var(--apple-blue); border-color: var(--apple-blue); }
   .exp-role { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
   .exp-company { font-size: 12px; color: var(--apple-blue); margin-bottom: 0.6rem; }
-  .exp-desc { font-size: 13px; font-weight: 300; color: rgba(245,245,247,0.5); line-height: 1.7; }
+  .exp-desc { font-size: 13px; font-weight: 300; color: rgba(245,245,247,0.6); line-height: 1.7; }
   .badge-current { display: inline-block; margin-bottom: 6px; font-size: 10px; font-weight: 500; color: #30D158; background: rgba(48,209,88,0.1); border: 1px solid rgba(48,209,88,0.2); padding: 2px 8px; border-radius: 6px; letter-spacing: 0.04em; }
 
   .contact-wrap { max-width: 540px; }
-  .contact-desc { font-size: 16px; font-weight: 300; color: rgba(245,245,247,0.55); line-height: 1.8; margin-bottom: 2.5rem; }
+  .contact-desc { font-size: 16px; font-weight: 300; color: rgba(245,245,247,0.6); line-height: 1.8; margin-bottom: 2.5rem; }
   .contact-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
-  footer { padding: 2rem 2.5rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; max-width: 1100px; margin: 0 auto; }
+  footer { padding: 2rem 2.5rem; border-top: 1px solid var(--border); max-width: 1100px; margin: 0 auto; }
   .footer-copy { font-size: 12px; color: var(--text-tertiary); }
-  .footer-stack { font-size: 12px; color: rgba(134,134,139,0.4); }
 
+  /* i18n — hide inactive lang */
+  [data-lang] { display: none; }
+  .lang-en [data-lang="en"] { display: revert; }
+  .lang-id [data-lang="id"] { display: revert; }
+  /* inline spans */
+  span[data-lang] { display: none; }
+  .lang-en span[data-lang="en"],
+  .lang-id span[data-lang="id"] { display: inline; }
+
+  @media (max-width: 900px) {
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 768px) {
     .hero { grid-template-columns: 1fr; gap: 2.5rem; }
     .hero-photo { display: flex; justify-content: center; order: -1; }
@@ -149,50 +166,59 @@
     .exp-item { grid-template-columns: 1fr; }
     .exp-item::after, .exp-dot { display: none; }
     .exp-period { margin-bottom: 4px; }
+    .skills-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
-<body>
+<body class="lang-en">
 
 <nav>
-  <span class="nav-logo">rianerlangga.dev</span>
   <div class="nav-links">
-    <a href="#skills">Skills</a>
-    <a href="#work">Work</a>
-    <a href="#experience">Experience</a>
-    <a href="#contact">Contact</a>
+    <a href="#skills"><span data-lang="en">Skills</span><span data-lang="id">Keahlian</span></a>
+    <a href="#work"><span data-lang="en">Work</span><span data-lang="id">Portofolio</span></a>
+    <a href="#experience"><span data-lang="en">Experience</span><span data-lang="id">Pengalaman</span></a>
+    <a href="#contact"><span data-lang="en">Contact</span><span data-lang="id">Kontak</span></a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btn-id" onclick="setLang('id')">ID</button>
+    </div>
   </div>
 </nav>
 
 <div class="page-wrap">
 <section class="hero">
   <div>
-    <p class="hero-tag">iOS Developer · Jakarta, Indonesia</p>
+    <p class="hero-tag">iOS Developer &middot; Jakarta, Indonesia</p>
     <h1 class="hero-name">Rian Erlangga<br><span class="last">Saputra</span></h1>
-    <p class="hero-title">Swift · Objective-C · SwiftUI · UIKit</p>
-    <p class="hero-desc">9 years of crafting high-quality iOS apps. Specialized in Apple&#8217;s ecosystem, clean architecture, and shipping products used by millions.</p>
+    <p class="hero-title">Swift &middot; Objective-C &middot; SwiftUI &middot; UIKit</p>
+    <p class="hero-desc">
+      <span data-lang="en">9 years of crafting high-quality iOS apps. Specialized in Apple&#8217;s ecosystem, clean architecture, and shipping products used by millions.</span>
+      <span data-lang="id">9 tahun merancang aplikasi iOS berkualitas tinggi. Spesialis dalam ekosistem Apple, arsitektur bersih, dan menghadirkan produk yang digunakan jutaan orang.</span>
+    </p>
     <div class="hero-stats">
-      <div><div class="stat-num">9+</div><div class="stat-label">Years iOS</div></div>
-      <div><div class="stat-num">15M+</div><div class="stat-label">App Users</div></div>
-      <div><div class="stat-num">~99%</div><div class="stat-label">Crash-free</div></div>
-      <div><div class="stat-num">12+</div><div class="stat-label">Years Total</div></div>
+      <div><div class="stat-num">9+</div><div class="stat-label"><span data-lang="en">Years iOS</span><span data-lang="id">Tahun iOS</span></div></div>
+      <div><div class="stat-num">15M+</div><div class="stat-label"><span data-lang="en">App Users</span><span data-lang="id">Pengguna App</span></div></div>
+      <div><div class="stat-num">~99%</div><div class="stat-label"><span data-lang="en">Crash-free</span><span data-lang="id">Bebas Crash</span></div></div>
+      <div><div class="stat-num">12+</div><div class="stat-label"><span data-lang="en">Years Total</span><span data-lang="id">Total Karier</span></div></div>
     </div>
     <div class="hero-cta">
-      <a href="#contact" class="btn btn-primary">Get in touch</a>
-      <a href="#work" class="btn btn-outline">See my work</a>
+      <a href="#contact" class="btn btn-primary"><span data-lang="en">Get in touch</span><span data-lang="id">Hubungi Saya</span></a>
+      <a href="#work" class="btn btn-outline"><span data-lang="en">See my work</span><span data-lang="id">Lihat Karya</span></a>
     </div>
     <div class="hero-social">
       <a href="https://www.linkedin.com/in/rian-erlangga-saputra-12429584/" target="_blank" class="social-link" title="LinkedIn">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       </a>
       <a href="https://www.instagram.com/rerlanggas/" target="_blank" class="social-link" title="Instagram">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
       </a>
       <a href="https://x.com/rerlanggas" target="_blank" class="social-link" title="X / Twitter">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       </a>
       <a href="https://www.upwork.com/freelancers/~0151cad02a64c92d78" target="_blank" class="social-link" title="Upwork">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.546-1.405 0-2.543-1.14-2.543-2.546V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06 1.492 0 2.703 1.212 2.703 2.703-.001 1.489-1.212 2.702-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112c-.002 1.406-1.141 2.546-2.547 2.546-1.405 0-2.543-1.14-2.543-2.546V3.492H0v7.112c0 2.914 2.37 5.303 5.281 5.303 2.913 0 5.283-2.389 5.283-5.303v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.439-5.439-5.439z"/></svg>
       </a>
     </div>
   </div>
@@ -205,109 +231,185 @@
 </section>
 </div>
 
+<!-- SKILLS -->
 <div class="section-wrap"><section id="skills">
-  <p class="section-eyebrow">Capabilities</p>
-  <h2 class="section-title">Built for Apple&#8217;s ecosystem</h2>
-  <p class="section-subtitle">9 years deep in Swift, UIKit, and everything in between.</p>
+  <p class="section-eyebrow"><span data-lang="en">Capabilities</span><span data-lang="id">Keahlian</span></p>
+  <h2 class="section-title">
+    <span data-lang="en">Built for Apple&#8217;s ecosystem</span>
+    <span data-lang="id">Dibangun untuk ekosistem Apple</span>
+  </h2>
+  <p class="section-subtitle">
+    <span data-lang="en">9 years deep in Swift, UIKit, and everything in between.</span>
+    <span data-lang="id">9 tahun mendalami Swift, UIKit, dan seluruh ekosistemnya.</span>
+  </p>
   <div class="skills-grid">
-    <div class="skill-card"><div class="skill-icon">Languages</div><div class="skill-name">Core Development</div><div class="skill-tags"><span class="tag">Swift</span><span class="tag">Objective-C</span><span class="tag">Kotlin</span><span class="tag">Java</span></div></div>
-    <div class="skill-card"><div class="skill-icon">UI Frameworks</div><div class="skill-name">Interface Building</div><div class="skill-tags"><span class="tag">SwiftUI</span><span class="tag">UIKit</span><span class="tag">Storyboard</span><span class="tag">XIB</span></div></div>
-    <div class="skill-card"><div class="skill-icon">Architecture</div><div class="skill-name">Design Patterns</div><div class="skill-tags"><span class="tag">MVVM</span><span class="tag">VIPER</span><span class="tag">MVC</span><span class="tag">Clean Arch</span></div></div>
-    <div class="skill-card"><div class="skill-icon">Data &amp; Network</div><div class="skill-name">Backend Integration</div><div class="skill-tags"><span class="tag">URLSession</span><span class="tag">Alamofire</span><span class="tag">CoreData</span><span class="tag">Realm</span></div></div>
-    <div class="skill-card"><div class="skill-icon">Concurrency</div><div class="skill-name">Async &amp; Performance</div><div class="skill-tags"><span class="tag">GCD</span><span class="tag">Combine</span><span class="tag">OperationQueue</span></div></div>
-    <div class="skill-card"><div class="skill-icon">Tooling</div><div class="skill-name">Dev Workflow</div><div class="skill-tags"><span class="tag">Xcode</span><span class="tag">Fastlane</span><span class="tag">Firebase</span><span class="tag">APNs</span><span class="tag">Figma</span></div></div>
+    <div class="skill-card">
+      <div class="skill-icon"><span data-lang="en">Languages</span><span data-lang="id">Bahasa Pemrograman</span></div>
+      <div class="skill-name"><span data-lang="en">Core Development</span><span data-lang="id">Pengembangan Inti</span></div>
+      <div class="skill-tags"><span class="tag">Swift</span><span class="tag">Objective-C</span><span class="tag">Kotlin</span><span class="tag">Java</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon"><span data-lang="en">UI Frameworks</span><span data-lang="id">Framework UI</span></div>
+      <div class="skill-name"><span data-lang="en">Interface Building</span><span data-lang="id">Pembuatan Antarmuka</span></div>
+      <div class="skill-tags"><span class="tag">SwiftUI</span><span class="tag">UIKit</span><span class="tag">Storyboard</span><span class="tag">XIB</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon"><span data-lang="en">Architecture</span><span data-lang="id">Arsitektur</span></div>
+      <div class="skill-name"><span data-lang="en">Design Patterns</span><span data-lang="id">Pola Desain</span></div>
+      <div class="skill-tags"><span class="tag">MVVM</span><span class="tag">VIPER</span><span class="tag">MVC</span><span class="tag">Clean Arch</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon"><span data-lang="en">Data &amp; Network</span><span data-lang="id">Data &amp; Jaringan</span></div>
+      <div class="skill-name"><span data-lang="en">Backend Integration</span><span data-lang="id">Integrasi Backend</span></div>
+      <div class="skill-tags"><span class="tag">URLSession</span><span class="tag">Alamofire</span><span class="tag">CoreData</span><span class="tag">Realm</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon"><span data-lang="en">Concurrency</span><span data-lang="id">Konkurensi</span></div>
+      <div class="skill-name"><span data-lang="en">Async &amp; Performance</span><span data-lang="id">Async &amp; Performa</span></div>
+      <div class="skill-tags"><span class="tag">GCD</span><span class="tag">Combine</span><span class="tag">OperationQueue</span></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon"><span data-lang="en">Tooling</span><span data-lang="id">Alat Pengembangan</span></div>
+      <div class="skill-name"><span data-lang="en">Dev Workflow</span><span data-lang="id">Alur Kerja</span></div>
+      <div class="skill-tags"><span class="tag">Xcode</span><span class="tag">Fastlane</span><span class="tag">Firebase</span><span class="tag">APNs</span><span class="tag">Figma</span></div>
+    </div>
   </div>
 </section></div>
 
+<!-- PORTFOLIO -->
 <div class="section-wrap"><section id="work">
   <p class="section-eyebrow">Portfolio</p>
-  <h2 class="section-title">Apps I&#8217;ve shipped</h2>
-  <p class="section-subtitle">From fintech to telco &#8212; real products, real users.</p>
+  <h2 class="section-title">
+    <span data-lang="en">Apps I&#8217;ve shipped</span>
+    <span data-lang="id">Aplikasi yang telah saya rilis</span>
+  </h2>
+  <p class="section-subtitle">
+    <span data-lang="en">From fintech to telco &#8212; real products, real users.</span>
+    <span data-lang="id">Dari fintech hingga telko &#8212; produk nyata, pengguna nyata.</span>
+  </p>
 
   <div class="employer-group">
-    <div class="employer-header"><span class="employer-name">Aleph-Labs</span><span class="employer-sep"></span><span class="employer-period">Jun 2021 &#8211; Present</span></div>
+    <div class="employer-header"><span class="employer-name">Aleph-Labs</span><span class="employer-sep"></span><span class="employer-period">Jun 2021 &#8211; <span data-lang="en">Present</span><span data-lang="id">Sekarang</span></span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-icon">MyXL</div><div class="app-name">MyXL Ultimate</div><div class="app-tech">Swift &#183; UIKit &#183; SwiftUI</div><div class="app-desc">Indonesia&#8217;s leading telco self-service app for XL Axiata &#8212; quota checking, package purchases, and account management for millions of users.</div><a href="https://apps.apple.com/id/app/myxl-cek-kuota-beli-paket-xl/id683141076" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-icon">MyXL</div><div class="app-name">MyXL Ultimate</div><div class="app-tech">Swift &middot; UIKit &middot; SwiftUI</div><div class="app-desc"><span data-lang="en">Indonesia&#8217;s leading telco self-service app for XL Axiata &#8212; quota checking, package purchases, and account management for millions of users.</span><span data-lang="id">Aplikasi self-service telko terdepan XL Axiata di Indonesia &#8212; cek kuota, beli paket, dan manajemen akun untuk jutaan pengguna.</span></div><a href="https://apps.apple.com/id/app/myxl-cek-kuota-beli-paket-xl/id683141076" target="_blank" class="app-link">App Store &#8599;</a></div>
     </div>
   </div>
 
   <div class="employer-group">
     <div class="employer-header"><span class="employer-name">EmpatKali (Afterpay Indonesia)</span><span class="employer-sep"></span><span class="employer-period">Sep 2020 &#8211; Jun 2021</span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-icon">4&#215;</div><div class="app-name">EmpatKali</div><div class="app-tech">Swift &#183; UIKit</div><div class="app-desc">Fintech BNPL app for the Indonesian market, enabling 4x installment payments with a seamless mobile experience.</div><a href="https://www.linkedin.com/company/empatkali/posts/?feedView=all" target="_blank" class="app-link">LinkedIn &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-icon">4&#215;</div><div class="app-name">EmpatKali</div><div class="app-tech">Swift &middot; UIKit</div><div class="app-desc"><span data-lang="en">Fintech BNPL app for the Indonesian market, enabling 4x installment payments with a seamless mobile experience.</span><span data-lang="id">Aplikasi BNPL fintech untuk pasar Indonesia yang memungkinkan cicilan 4x dengan pengalaman mobile yang mulus.</span></div><a href="https://www.linkedin.com/company/empatkali/posts/?feedView=all" target="_blank" class="app-link">LinkedIn &#8599;</a></div>
     </div>
   </div>
 
   <div class="employer-group">
     <div class="employer-header"><span class="employer-name">Good Boy Studios</span><span class="employer-sep"></span><span class="employer-period">Sep 2019 &#8211; Sep 2020</span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-icon">Pet</div><div class="app-name">Pet Parade</div><div class="app-tech">Swift &#183; UIKit</div><div class="app-desc">Social platform for pet businesses and pet parents, powered by Patent-pending Pet Demographics&#174; Audience Platform.</div><a href="https://apps.apple.com/gb/app/pet-parade-cutest-pet-game/id1144089495" target="_blank" class="app-link">App Store &#8599;</a></div>
-      <div class="portfolio-card"><div class="app-icon">CF2</div><div class="app-name">Cat Fishing 2</div><div class="app-tech">Unity &#183; C#</div><div class="app-desc">Addictive mobile game for cat lovers built with Unity &#8212; guide your cat to catch fish on screen.</div><a href="https://apps.apple.com/us/app/cat-fishing-2/id494384429" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-icon">Pet</div><div class="app-name">Pet Parade</div><div class="app-tech">Swift &middot; UIKit</div><div class="app-desc"><span data-lang="en">Social platform for pet businesses and pet parents, powered by Patent-pending Pet Demographics&#174; Audience Platform.</span><span data-lang="id">Platform sosial untuk bisnis hewan peliharaan dan pemilik hewan, didukung oleh Pet Demographics&#174; Audience Platform.</span></div><a href="https://apps.apple.com/gb/app/pet-parade-cutest-pet-game/id1144089495" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-icon">CF2</div><div class="app-name">Cat Fishing 2</div><div class="app-tech">Unity &middot; C#</div><div class="app-desc"><span data-lang="en">Addictive mobile game for cat lovers built with Unity &#8212; guide your cat to catch fish on screen.</span><span data-lang="id">Game mobile adiktif untuk pecinta kucing yang dibuat dengan Unity &#8212; pandu kucingmu menangkap ikan di layar.</span></div><a href="https://apps.apple.com/us/app/cat-fishing-2/id494384429" target="_blank" class="app-link">App Store &#8599;</a></div>
     </div>
   </div>
 
   <div class="employer-group">
     <div class="employer-header"><span class="employer-name">Ask-Fast</span><span class="employer-sep"></span><span class="employer-period">Jan 2017 &#8211; Sep 2019</span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-icon">AF</div><div class="app-name">Ask-Fast</div><div class="app-tech">Swift &#183; Objective-C</div><div class="app-desc">One of 4 iOS products developed at Ask-Fast. App has since been unpublished.</div><a href="https://www.linkedin.com/company/ask-fast/posts/?feedView=all" target="_blank" class="app-link">LinkedIn &#8599;</a></div>
-      <div class="portfolio-card"><div class="app-icon">TT</div><div class="app-name">TeamTelefoon</div><div class="app-tech">Swift &#183; UIKit</div><div class="app-desc">Team phone management app for businesses, streamlining internal calls and contact management.</div><a href="https://apps.apple.com/be/app/teamtelefoon/id1354423903" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-icon">AF</div><div class="app-name">Ask-Fast</div><div class="app-tech">Swift &middot; Objective-C</div><div class="app-desc"><span data-lang="en">One of 4 iOS products developed at Ask-Fast. App has since been unpublished.</span><span data-lang="id">Salah satu dari 4 produk iOS yang dikembangkan di Ask-Fast. Aplikasi telah diturunkan dari App Store.</span></div><a href="https://www.linkedin.com/company/ask-fast/posts/?feedView=all" target="_blank" class="app-link">LinkedIn &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-icon">TT</div><div class="app-name">TeamTelefoon</div><div class="app-tech">Swift &middot; UIKit</div><div class="app-desc"><span data-lang="en">Team phone management app for businesses, streamlining internal calls and contact management.</span><span data-lang="id">Aplikasi manajemen telepon tim untuk bisnis, menyederhanakan panggilan internal dan manajemen kontak.</span></div><a href="https://apps.apple.com/be/app/teamtelefoon/id1354423903" target="_blank" class="app-link">App Store &#8599;</a></div>
     </div>
   </div>
 
   <div class="employer-group">
-    <div class="employer-header"><span class="employer-name">Personal Projects</span></div>
+    <div class="employer-header"><span class="employer-name"><span data-lang="en">Personal Projects</span><span data-lang="id">Proyek Pribadi</span></span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-icon">SR</div><div class="app-name">SchoolRyde</div><div class="app-tech">Swift &#183; SwiftUI</div><div class="app-desc">School transportation app with real-time tracking, keeping parents informed and children safe on their daily commute.</div><a href="https://apps.apple.com/us/app/schoolryde/id6738888710" target="_blank" class="app-link">App Store &#8599;</a></div>
-      <div class="portfolio-card"><div class="app-icon">NA</div><div class="app-name">NantiAja</div><div class="app-tech">Swift &#183; SwiftUI</div><div class="app-desc">Upcoming iOS app in development. Follow along for behind-the-scenes updates.</div><a href="https://www.instagram.com/nantiajaid/" target="_blank" class="app-link">Instagram &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-icon">SR</div><div class="app-name">SchoolRyde</div><div class="app-tech">Swift &middot; SwiftUI</div><div class="app-desc"><span data-lang="en">School transportation app with real-time tracking, keeping parents informed and children safe on their daily commute.</span><span data-lang="id">Aplikasi transportasi sekolah dengan pelacakan real-time, menjaga orang tua tetap terinformasi dan anak-anak tetap aman.</span></div><a href="https://apps.apple.com/us/app/schoolryde/id6738888710" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-icon">NA</div><div class="app-name">NantiAja</div><div class="app-tech">Swift &middot; SwiftUI</div><div class="app-desc"><span data-lang="en">Upcoming iOS app in development. Follow along on Instagram for behind-the-scenes updates.</span><span data-lang="id">Aplikasi iOS yang sedang dalam pengembangan. Ikuti terus di Instagram untuk pembaruan di balik layar.</span></div><a href="https://www.instagram.com/nantiajaid/" target="_blank" class="app-link">Instagram &#8599;</a></div>
     </div>
   </div>
 </section></div>
 
+<!-- EXPERIENCE -->
 <div class="section-wrap"><section id="experience">
-  <p class="section-eyebrow">Career</p>
-  <h2 class="section-title">12 years of mobile</h2>
-  <p class="section-subtitle">From Android roots to Apple expertise.</p>
+  <p class="section-eyebrow"><span data-lang="en">Career</span><span data-lang="id">Karier</span></p>
+  <h2 class="section-title">
+    <span data-lang="en">12 years of mobile</span>
+    <span data-lang="id">12 tahun di industri mobile</span>
+  </h2>
+  <p class="section-subtitle">
+    <span data-lang="en">From Android roots to Apple expertise.</span>
+    <span data-lang="id">Dari akar Android hingga keahlian Apple.</span>
+  </p>
   <div class="exp-list">
     <div class="exp-item exp-current">
-      <div class="exp-period">Jun 2021<br>Present</div>
+      <div class="exp-period">Jun 2021<br><span data-lang="en">Present</span><span data-lang="id">Sekarang</span></div>
       <div class="exp-dot"></div>
-      <div><span class="badge-current">Current</span><div class="exp-role">Senior iOS Developer</div><div class="exp-company">Aleph-Labs</div><div class="exp-desc">Designed and developed MyXL Ultimate and Telkomsel By.U, serving 15M+ users. Maintained ~99% crash-free rate. Optimized app size, shipped major features, and led cross-functional collaboration.</div></div>
+      <div><span class="badge-current"><span data-lang="en">Current</span><span data-lang="id">Sekarang</span></span>
+        <div class="exp-role">Senior iOS Developer</div>
+        <div class="exp-company">Aleph-Labs</div>
+        <div class="exp-desc"><span data-lang="en">Designed and developed MyXL Ultimate and Telkomsel By.U, serving 15M+ users. Maintained ~99% crash-free rate. Optimized app size, shipped major features, and led cross-functional collaboration.</span><span data-lang="id">Merancang dan mengembangkan MyXL Ultimate dan Telkomsel By.U, melayani 15M+ pengguna. Mempertahankan tingkat bebas crash ~99%. Mengoptimalkan ukuran app dan memimpin kolaborasi lintas fungsi.</span></div>
+      </div>
     </div>
     <div class="exp-item">
       <div class="exp-period">Sep 2020<br>Jun 2021</div>
       <div class="exp-dot"></div>
-      <div><div class="exp-role">Senior iOS Developer</div><div class="exp-company">EmpatKali (Afterpay Indonesia)</div><div class="exp-desc">Built iOS fintech app from ground up. Led feature development, performance improvements, and cross-team collaboration in a fast-moving BNPL startup.</div></div>
+      <div>
+        <div class="exp-role">Senior iOS Developer</div>
+        <div class="exp-company">EmpatKali (Afterpay Indonesia)</div>
+        <div class="exp-desc"><span data-lang="en">Built iOS fintech app from ground up. Led feature development, performance improvements, and cross-team collaboration in a fast-moving BNPL startup.</span><span data-lang="id">Membangun aplikasi fintech iOS dari awal. Memimpin pengembangan fitur, peningkatan performa, dan kolaborasi lintas tim di startup BNPL yang bergerak cepat.</span></div>
+      </div>
     </div>
     <div class="exp-item">
       <div class="exp-period">Sep 2019<br>Sep 2020</div>
       <div class="exp-dot"></div>
-      <div><div class="exp-role">iOS Developer</div><div class="exp-company">Good Boy Studios</div><div class="exp-desc">Built Pet Parade&#174; and PetStar&#8482; for iOS, plus Cat Fishing 2 using Unity. Worked closely with UI/UX designers and QA to deliver polished experiences.</div></div>
+      <div>
+        <div class="exp-role">iOS Developer</div>
+        <div class="exp-company">Good Boy Studios</div>
+        <div class="exp-desc"><span data-lang="en">Built Pet Parade&#174; and PetStar&#8482; for iOS, plus Cat Fishing 2 using Unity. Worked closely with UI/UX designers and QA to deliver polished experiences.</span><span data-lang="id">Membangun Pet Parade&#174; dan PetStar&#8482; untuk iOS, plus Cat Fishing 2 menggunakan Unity. Bekerja sama dengan desainer UI/UX dan QA untuk menghadirkan pengalaman yang sempurna.</span></div>
+      </div>
     </div>
     <div class="exp-item">
       <div class="exp-period">Jan 2017<br>Sep 2019</div>
       <div class="exp-dot"></div>
-      <div><div class="exp-role">iOS Developer</div><div class="exp-company">Ask-Fast</div><div class="exp-desc">Developed 4 iOS products including Ask-Fast and TeamTelefoon. Collaborated across countries and time zones to ship features and improve performance.</div></div>
+      <div>
+        <div class="exp-role">iOS Developer</div>
+        <div class="exp-company">Ask-Fast</div>
+        <div class="exp-desc"><span data-lang="en">Developed 4 iOS products including Ask-Fast and TeamTelefoon. Collaborated across countries and time zones to ship features and improve performance.</span><span data-lang="id">Mengembangkan 4 produk iOS termasuk Ask-Fast dan TeamTelefoon. Berkolaborasi lintas negara dan zona waktu untuk merilis fitur dan meningkatkan performa.</span></div>
+      </div>
     </div>
     <div class="exp-item">
       <div class="exp-period">Jun 2015<br>Dec 2016</div>
       <div class="exp-dot"></div>
-      <div><div class="exp-role">Android Developer</div><div class="exp-company">Walden Global Services</div><div class="exp-desc">Android development for enterprise clients, broadening mobile platform knowledge.</div></div>
+      <div>
+        <div class="exp-role">Android Developer</div>
+        <div class="exp-company">Walden Global Services</div>
+        <div class="exp-desc"><span data-lang="en">Android development for enterprise clients, broadening mobile platform knowledge.</span><span data-lang="id">Pengembangan Android untuk klien enterprise, memperluas pengetahuan platform mobile.</span></div>
+      </div>
     </div>
     <div class="exp-item">
       <div class="exp-period">Nov 2013<br>May 2015</div>
       <div class="exp-dot"></div>
-      <div><div class="exp-role">Mobile Android Developer</div><div class="exp-company">Rumus Media Nusantara</div><div class="exp-desc">Started mobile development career building Android applications from the ground up.</div></div>
+      <div>
+        <div class="exp-role">Mobile Android Developer</div>
+        <div class="exp-company">Rumus Media Nusantara</div>
+        <div class="exp-desc"><span data-lang="en">Started mobile development career building Android applications from the ground up.</span><span data-lang="id">Memulai karier pengembangan mobile dengan membangun aplikasi Android dari awal.</span></div>
+      </div>
     </div>
   </div>
 </section></div>
 
+<!-- CONTACT -->
 <div class="section-wrap"><section id="contact">
-  <p class="section-eyebrow">Let&#8217;s work</p>
-  <h2 class="section-title">Have an iOS idea?</h2>
+  <p class="section-eyebrow"><span data-lang="en">Let&#8217;s work</span><span data-lang="id">Mari Berkolaborasi</span></p>
+  <h2 class="section-title">
+    <span data-lang="en">Have an iOS idea?</span>
+    <span data-lang="id">Punya ide aplikasi iOS?</span>
+  </h2>
   <div class="contact-wrap">
-    <p class="contact-desc">Available for freelance projects, consulting, and full-time roles. Whether it&#8217;s a new app or an existing product that needs care &#8212; let&#8217;s talk.</p>
+    <p class="contact-desc">
+      <span data-lang="en">Available for freelance projects, consulting, and full-time roles. Whether it&#8217;s a new app or an existing product that needs care &#8212; let&#8217;s talk.</span>
+      <span data-lang="id">Tersedia untuk proyek freelance, konsultasi, dan posisi full-time. Baik itu aplikasi baru maupun produk yang sudah ada &#8212; mari kita diskusikan.</span>
+    </p>
     <div class="contact-links">
-      <a href="https://www.upwork.com/freelancers/~0151cad02a64c92d78" target="_blank" class="btn btn-primary">Hire on Upwork</a>
+      <a href="https://www.upwork.com/freelancers/~0151cad02a64c92d78" target="_blank" class="btn btn-primary"><span data-lang="en">Hire on Upwork</span><span data-lang="id">Rekrut di Upwork</span></a>
       <a href="https://www.linkedin.com/in/rian-erlangga-saputra-12429584/" target="_blank" class="btn btn-outline">LinkedIn</a>
     </div>
   </div>
@@ -315,10 +417,14 @@
 
 <footer>
   <span class="footer-copy">&#169; 2025 Rian Erlangga Saputra</span>
-  <span class="footer-stack">Designed for the web</span>
 </footer>
 
 <script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-id').classList.toggle('active', lang === 'id');
+  }
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
@@ -331,7 +437,7 @@
     });
   }, { threshold: 0.08 });
   document.querySelectorAll('.skill-card,.portfolio-card,.exp-item').forEach((el,i) => {
-    el.style.cssText += 'opacity:0;transform:translateY(16px);transition:opacity 0.45s ease ' + (i*0.035) + 's,transform 0.45s ease ' + (i*0.035) + 's,background 0.15s';
+    el.style.cssText += 'opacity:0;transform:translateY(16px);transition:opacity 0.45s ease '+(i*0.04)+'s,transform 0.45s ease '+(i*0.04)+'s,background 0.15s';
     obs.observe(el);
   });
 </script>
