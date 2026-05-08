@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -294,9 +294,93 @@
   }
   .lightbox-close:hover { background: rgba(255,255,255,0.2); }
 
+
+  /* SCROLL PROGRESS INDICATOR */
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: linear-gradient(90deg, #0071E3, #5AC8FA);
+    width: 0%; z-index: 101;
+    transition: width 0.1s ease-out;
+    box-shadow: 0 0 8px rgba(0,113,227,0.5);
+  }
+
+  /* LOADING ANIMATION */
+  .page-loader {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+  .page-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .loader-spinner {
+    width: 40px; height: 40px;
+    border: 2px solid var(--border-light);
+    border-top-color: var(--apple-blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* TECH STACK ICONS */
+  .tech-stack-section {
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .tech-stack-label {
+    font-size: 11px; font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    text-align: center;
+  }
+  .tech-stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 1rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .tech-item {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 1rem 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .tech-item:hover {
+    background: var(--surface-2);
+    transform: translateY(-2px);
+    border-color: var(--border-light);
+  }
+  .tech-item img {
+    width: 36px; height: 36px;
+    margin-bottom: 0.5rem;
+    object-fit: contain;
+  }
+  .tech-item-name {
+    font-size: 11px; font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+  }
+
 </style>
+<script>
+  (function() {
+    const t = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
 </head>
 <body class="lang-en">
+<div class="page-loader" id="pageLoader"><div class="loader-spinner"></div></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
 
 <!-- SEO keywords (screen-reader & crawler accessible) -->
 <span class="seo-keywords">iOS developer Indonesia, iOS developer Jakarta, iOS developer Jakarta freelance, iOS developer Bandung, iOS developer Bandung freelance, Rian Erlangga Saputra iOS developer, Swift developer Indonesia, freelance mobile developer Jakarta</span>
@@ -367,6 +451,45 @@
     <div class="skill-card"><div class="skill-icon"><span data-lang="en">Data &amp; Network</span><span data-lang="id">Data &amp; Jaringan</span></div><div class="skill-name"><span data-lang="en">Backend Integration</span><span data-lang="id">Integrasi Backend</span></div><div class="skill-tags"><span class="tag">URLSession</span><span class="tag">Alamofire</span><span class="tag">CoreData</span><span class="tag">Realm</span></div></div>
     <div class="skill-card"><div class="skill-icon"><span data-lang="en">Concurrency</span><span data-lang="id">Konkurensi</span></div><div class="skill-name"><span data-lang="en">Async &amp; Performance</span><span data-lang="id">Async &amp; Performa</span></div><div class="skill-tags"><span class="tag">GCD</span><span class="tag">Combine</span><span class="tag">OperationQueue</span></div></div>
     <div class="skill-card"><div class="skill-icon"><span data-lang="en">Tooling</span><span data-lang="id">Alat Pengembangan</span></div><div class="skill-name"><span data-lang="en">Dev Workflow</span><span data-lang="id">Alur Kerja</span></div><div class="skill-tags"><span class="tag">Xcode</span><span class="tag">Fastlane</span><span class="tag">Firebase</span><span class="tag">APNs</span><span class="tag">Figma</span></div></div>
+  </div>
+
+  <div class="tech-stack-section">
+    <div class="tech-stack-label"><span data-lang="en">Tools &amp; Platforms</span><span data-lang="id">Tools &amp; Platform</span></div>
+    <div class="tech-stack-grid">
+      <a class="tech-item" title="Swift" href="https://swift.org" target="_blank" rel="noopener">
+        <img src="assets/tech/swift.svg" alt="Swift" loading="lazy">
+        <span class="tech-item-name">Swift</span>
+      </a>
+      <a class="tech-item" title="Xcode" href="https://developer.apple.com/xcode/" target="_blank" rel="noopener">
+        <img src="assets/tech/xcode.svg" alt="Xcode" loading="lazy">
+        <span class="tech-item-name">Xcode</span>
+      </a>
+      <a class="tech-item" title="SwiftUI" href="https://developer.apple.com/xcode/swiftui/" target="_blank" rel="noopener">
+        <img src="assets/tech/swiftui.svg" alt="SwiftUI" loading="lazy">
+        <span class="tech-item-name">SwiftUI</span>
+      </a>
+      <a class="tech-item" title="UIKit" href="https://developer.apple.com/documentation/uikit" target="_blank" rel="noopener">
+        <img src="assets/tech/uikit.svg" alt="UIKit" loading="lazy">
+        <span class="tech-item-name">UIKit</span>
+      </a>
+      <a class="tech-item" title="Objective-C" href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/" target="_blank" rel="noopener">
+        <img src="assets/tech/objectivec.svg" alt="Objective-C" loading="lazy">
+        <span class="tech-item-name">Obj-C</span>
+      </a>
+      <a class="tech-item" title="Firebase" href="https://firebase.google.com" target="_blank" rel="noopener">
+        <img src="assets/tech/firebase.svg" alt="Firebase" loading="lazy">
+        <span class="tech-item-name">Firebase</span>
+      </a>
+      <a class="tech-item" title="Git" href="https://git-scm.com" target="_blank" rel="noopener">
+        <img src="assets/tech/git.svg" alt="Git" loading="lazy">
+        <span class="tech-item-name">Git</span>
+      </a>
+      <a class="tech-item" title="Figma" href="https://www.figma.com" target="_blank" rel="noopener">
+        <img src="assets/tech/figma.svg" alt="Figma" loading="lazy">
+        <span class="tech-item-name">Figma</span>
+      </a>
+    </div>
+    </div>
   </div>
 </section></div>
 
@@ -456,10 +579,18 @@
     document.getElementById("btn-id").classList.toggle("active", lang === "id");
     localStorage.setItem("lang", lang);
   }
-  const savedTheme = localStorage.getItem("theme") || "dark";
+  // Theme: respect system preference if user hasn't manually toggled
+  const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const savedTheme = localStorage.getItem("theme") || (systemPrefersDark ? "dark" : "light");
   const savedLang = localStorage.getItem("lang") || "en";
   document.documentElement.setAttribute("data-theme", savedTheme);
   if (savedLang === "id") setLang("id");
+  // Listen for system theme changes (only if user hasn't manually picked)
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
+    if (!localStorage.getItem("theme")) {
+      document.documentElement.setAttribute("data-theme", e.matches ? "dark" : "light");
+    }
+  });
   document.querySelectorAll("a[href^='#']").forEach(a => {
     a.addEventListener("click", e => {
       e.preventDefault();
@@ -475,6 +606,20 @@
     el.style.cssText += "opacity:0;transform:translateY(16px);transition:opacity 0.45s ease "+(i*0.04)+"s,transform 0.45s ease "+(i*0.04)+"s,background 0.15s";
     obs.observe(el);
   });
+
+  // Loader fade out when page is fully loaded
+  window.addEventListener("load", () => {
+    setTimeout(() => document.getElementById("pageLoader").classList.add("hidden"), 200);
+  });
+  // Scroll progress
+  const progressBar = document.getElementById("scrollProgress");
+  window.addEventListener("scroll", () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (scrollTop / docHeight) * 100;
+    progressBar.style.width = scrolled + "%";
+  }, { passive: true });
+
 </script>
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
