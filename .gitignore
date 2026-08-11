@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+._*
+
+# Editor / tooling
+.claude/
+.vscode/
+.idea/
+
+# Scratch
+*.log
+_probe*.html
