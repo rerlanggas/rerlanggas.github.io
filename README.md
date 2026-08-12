@@ -19,10 +19,38 @@ Personal portfolio website for Rian Erlangga Saputra, Senior iOS Developer based
     │   ├── light_video.mp4         # Hero background loop (light theme)
     │   ├── poster-dark.jpg         # First-paint still for the dark loop
     │   └── poster-light.jpg        # First-paint still for the light loop
+    ├── photo.webp                  # Profile photo (served); photo.jpg is the master
     ├── logos/                      # 8 app logos
-    ├── screenshots/                # 8 app screenshots
+    ├── screenshots/                # 8 masters (.jpg) + full-size .webp for the lightbox
+    │   └── thumb/                  # Small .webp used by the portfolio grid
     └── tech/                       # 8 tech stack icons (SVG)
 ```
+
+## Images
+
+The portfolio grid and the lightbox load different files. The grid uses the small
+`thumb/*.webp`; the full-size `*.webp` is fetched only when a screenshot is
+opened. The `.jpg` files are kept as masters and are never served.
+
+Regenerate after replacing a master (needs `brew install webp`):
+
+```sh
+for f in assets/screenshots/*.jpg; do
+  b=$(basename "$f" .jpg)
+  cwebp -q 78 -resize 1000 0 "$f" -o "assets/screenshots/thumb/$b.webp"   # grid
+  cwebp -q 82            "$f" -o "assets/screenshots/$b.webp"             # lightbox
+done
+cwebp -q 82 -resize 500 0 assets/photo.jpg -o assets/photo.webp
+```
+
+## Fonts
+
+Deliberately no web font. The system stack (`-apple-system` → SF Pro on Apple
+devices, Roboto on Android, Segoe UI on Windows) renders with zero network cost.
+An earlier build loaded Inter from Google Fonts; it was a render-blocking request
+and its swap-in reflowed the hero, which was responsible for a 0.747 CLS score.
+Adding a web font back will reintroduce both problems unless it is self-hosted,
+preloaded, and set to `font-display: optional`.
 
 ## Hero video
 

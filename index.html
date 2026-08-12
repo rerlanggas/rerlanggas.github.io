@@ -119,15 +119,17 @@
 }
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- No web font by design: the system stack below renders instantly, removing a
+     render-blocking request and the font-swap reflow that dominated CLS. -->
+
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root, [data-theme="dark"] {
     --bg: #000000; --nav-bg: rgba(0,0,0,0.8);
     --apple-blue: #0071E3; --apple-blue-hover: #0077ED;
-    --text-primary: #F5F5F7; --text-secondary: #AEAEB2; --text-tertiary: #6E6E73;
+    /* tertiary is WCAG AA on --bg: 6.44:1 (was #6E6E73 at 4.14:1, failing) */
+    --text-primary: #F5F5F7; --text-secondary: #AEAEB2; --text-tertiary: #8E8E93;
     --border: rgba(255,255,255,0.08); --border-light: rgba(255,255,255,0.12);
     --surface-2: #2C2C2E; --surface-3: #3A3A3C;
     --hero-last: #86868B; --photo-filter: grayscale(8%) contrast(1.04) brightness(0.97);
@@ -147,7 +149,8 @@
   [data-theme="light"] {
     --bg: #FFFFFF; --nav-bg: rgba(255,255,255,0.82);
     --apple-blue: #0071E3; --apple-blue-hover: #0077ED;
-    --text-primary: #1D1D1F; --text-secondary: #6E6E73; --text-tertiary: #AEAEB2;
+    /* tertiary is WCAG AA on --bg: 4.72:1 (was #AEAEB2 at 2.21:1, badly failing) */
+    --text-primary: #1D1D1F; --text-secondary: #6E6E73; --text-tertiary: #737378;
     --border: rgba(0,0,0,0.08); --border-light: rgba(0,0,0,0.1);
     --surface-2: #E8E8ED; --surface-3: #D2D2D7;
     --hero-last: #6E6E73; --photo-filter: grayscale(5%) contrast(1.02) brightness(1.01);
@@ -171,7 +174,7 @@
   :focus-visible { outline: 2px solid var(--apple-blue); outline-offset: 3px; border-radius: 4px; }
   .skip-link { position: absolute; left: 50%; top: 0; transform: translate(-50%, -120%); z-index: 200; background: var(--apple-blue); color: #fff; padding: 10px 18px; border-radius: 0 0 10px 10px; font-size: 13px; text-decoration: none; transition: transform 0.18s ease; }
   .skip-link:focus { transform: translate(-50%, 0); }
-  body { font-family: -apple-system, "SF Pro Display", "Inter", "Helvetica Neue", sans-serif; background: var(--bg); color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background 0.3s ease, color 0.3s ease; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background 0.3s ease, color 0.3s ease; }
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 52px; background: var(--nav-bg); backdrop-filter: saturate(180%) blur(24px); -webkit-backdrop-filter: saturate(180%) blur(24px); border-bottom: 1px solid transparent; transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
   nav.scrolled { border-bottom-color: var(--border); box-shadow: var(--nav-shadow); }
   .nav-links { display: flex; gap: 2rem; }
@@ -220,7 +223,8 @@
   .hero-title { font-size: 13px; color: var(--text-secondary); letter-spacing: 0.02em; margin-bottom: 1.5rem; }
   .hero-desc { max-width: 500px; font-size: 16px; font-weight: 300; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; }
   .hero-stats { display: flex; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
-  .stat-num { font-size: 1.8rem; font-weight: 600; color: var(--text-primary); line-height: 1; letter-spacing: -0.02em; }
+  /* tabular figures keep the count-up from resizing its box mid-animation */
+  .stat-num { font-size: 1.8rem; font-weight: 600; color: var(--text-primary); line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
   .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; letter-spacing: 0.03em; }
   .hero-cta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
   .hero-social { display: flex; gap: 10px; }
@@ -236,7 +240,7 @@
   .photo-wrap:hover img { transform: scale(1.03); }
   .photo-overlay { position: absolute; bottom: 7px; left: 7px; right: 7px; padding: 14px; border-radius: 0 0 16px 16px; background: linear-gradient(transparent, rgba(0,0,0,0.75)); }
   /* The photo overlay is a dark gradient in both themes, so the badge is always light-on-dark. */
-  .photo-badge { display: inline-block; background: rgba(0,113,227,0.28); border: 1px solid rgba(120,190,255,0.5); border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 500; color: #EAF4FF; letter-spacing: 0.04em; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .photo-badge { display: inline-block; white-space: nowrap; background: rgba(0,113,227,0.28); border: 1px solid rgba(120,190,255,0.5); border-radius: 6px; padding: 4px 9px; font-size: 10px; font-weight: 500; color: #EAF4FF; letter-spacing: 0.02em; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; font-family: inherit; font-size: 13px; font-weight: 400; text-decoration: none; border-radius: 980px; transition: all 0.15s; cursor: pointer; border: none; letter-spacing: 0.01em; }
   .btn-primary { background: var(--apple-blue); color: #fff; box-shadow: 0 6px 24px -6px rgba(0,113,227,0.6); }
   .btn-primary:hover { background: var(--apple-blue-hover); transform: translateY(-2px); box-shadow: 0 10px 32px -6px rgba(0,113,227,0.75); }
@@ -452,9 +456,13 @@
     background: var(--bg);
     display: flex; align-items: center; justify-content: center;
     z-index: 9999;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
+    /* Only opacity is transitioned — `visibility` is not compositable and forced
+       this overlay onto the main thread every frame. */
+    transition: opacity 0.4s ease;
   }
-  .page-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .page-loader.hidden { opacity: 0; pointer-events: none; }
+  /* Removed from the a11y tree and hit-testing once faded, without animating it. */
+  .page-loader.gone { visibility: hidden; }
   .loader-spinner {
     width: 40px; height: 40px;
     border: 2px solid var(--border-light);
@@ -606,7 +614,7 @@
   </div>
   <div class="hero-photo">
     <div class="photo-wrap">
-      <img src="assets/photo.jpg" width="200" height="250" alt="Rian Erlangga Saputra - Senior iOS Developer Jakarta Indonesia">
+      <img src="assets/photo.webp" width="200" height="250" alt="Rian Erlangga Saputra - Senior iOS Developer Jakarta Indonesia">
       <div class="photo-overlay"><span class="photo-badge">iOS Developer &middot; Jakarta</span></div>
     </div>
   </div>
@@ -672,34 +680,34 @@
   <div class="employer-group">
     <div class="employer-header"><span class="employer-name">Aleph-Labs</span><span class="employer-sep"></span><span class="employer-period">Jun 2021 - <span data-lang="en">Present</span><span data-lang="id">Sekarang</span></span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('myxl')"><img src="assets/screenshots/myxl.jpg" alt="MyXL Ultimate iOS app screenshot, XL Axiata telco self-service app" loading="lazy"></div><div class="app-icon"><img src="assets/logos/myxl.jpg" alt="MyXL Ultimate app icon" loading="lazy"></div><div class="app-name">MyXL Ultimate</div><div class="app-tech">Swift &middot; UIKit &middot; SwiftUI</div><div class="app-desc"><span data-lang="en">Indonesia&#8217;s leading telco self-service app for XL Axiata, quota checking, package purchases, and account management for millions of users.</span><span data-lang="id">Aplikasi self-service telko terdepan XL Axiata di Indonesia, cek kuota, beli paket, dan manajemen akun untuk jutaan pengguna.</span></div><a href="https://apps.apple.com/id/app/myxl-cek-kuota-beli-paket-xl/id683141076" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('myxl')"><img src="assets/screenshots/thumb/myxl.webp" alt="MyXL Ultimate iOS app screenshot, XL Axiata telco self-service app" loading="lazy"></div><div class="app-icon"><img src="assets/logos/myxl.jpg" alt="MyXL Ultimate app icon" loading="lazy"></div><div class="app-name">MyXL Ultimate</div><div class="app-tech">Swift &middot; UIKit &middot; SwiftUI</div><div class="app-desc"><span data-lang="en">Indonesia&#8217;s leading telco self-service app for XL Axiata, quota checking, package purchases, and account management for millions of users.</span><span data-lang="id">Aplikasi self-service telko terdepan XL Axiata di Indonesia, cek kuota, beli paket, dan manajemen akun untuk jutaan pengguna.</span></div><a href="https://apps.apple.com/id/app/myxl-cek-kuota-beli-paket-xl/id683141076" target="_blank" class="app-link">App Store &#8599;</a></div>
     </div>
   </div>
   <div class="employer-group">
     <div class="employer-header"><span class="employer-name">EmpatKali (Afterpay Indonesia)</span><span class="employer-sep"></span><span class="employer-period">Sep 2020 - Jun 2021</span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('empatkali')"><img src="assets/screenshots/empatkali.jpg" alt="EmpatKali iOS app screenshot, BNPL fintech installment payments" loading="lazy"></div><div class="app-icon"><img src="assets/logos/empatkali.jpg" alt="EmpatKali app icon" loading="lazy"></div><div class="app-name">EmpatKali</div><div class="app-tech">Swift &middot; UIKit</div><div class="app-desc"><span data-lang="en">Fintech BNPL app for the Indonesian market, enabling 4x installment payments with a seamless mobile experience.</span><span data-lang="id">Aplikasi BNPL fintech untuk pasar Indonesia yang memungkinkan cicilan 4x dengan pengalaman mobile yang mulus.</span></div><a href="https://www.linkedin.com/company/empatkali/posts/?feedView=all" target="_blank" class="app-link">LinkedIn &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('empatkali')"><img src="assets/screenshots/thumb/empatkali.webp" alt="EmpatKali iOS app screenshot, BNPL fintech installment payments" loading="lazy"></div><div class="app-icon"><img src="assets/logos/empatkali.jpg" alt="EmpatKali app icon" loading="lazy"></div><div class="app-name">EmpatKali</div><div class="app-tech">Swift &middot; UIKit</div><div class="app-desc"><span data-lang="en">Fintech BNPL app for the Indonesian market, enabling 4x installment payments with a seamless mobile experience.</span><span data-lang="id">Aplikasi BNPL fintech untuk pasar Indonesia yang memungkinkan cicilan 4x dengan pengalaman mobile yang mulus.</span></div><a href="https://www.linkedin.com/company/empatkali/posts/?feedView=all" target="_blank" class="app-link">LinkedIn &#8599;</a></div>
     </div>
   </div>
   <div class="employer-group">
     <div class="employer-header"><span class="employer-name">Good Boy Studios</span><span class="employer-sep"></span><span class="employer-period">Sep 2019 - Sep 2020</span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('petparade')"><img src="assets/screenshots/petparade.jpg" alt="Pet Parade iOS app screenshot, social platform for pet parents" loading="lazy"></div><div class="app-icon"><img src="assets/logos/petparade.png" alt="Pet Parade app icon" loading="lazy"></div><div class="app-name">Pet Parade</div><div class="app-tech">Swift &middot; UIKit</div><div class="app-desc"><span data-lang="en">Social platform for pet businesses and pet parents, powered by Patent-pending Pet Demographics&#174; Audience Platform.</span><span data-lang="id">Platform sosial untuk bisnis hewan peliharaan dan pemilik hewan, didukung oleh Pet Demographics&#174; Audience Platform.</span></div><a href="https://apps.apple.com/gb/app/pet-parade-cutest-pet-game/id1144089495" target="_blank" class="app-link">App Store &#8599;</a></div>
-      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('catfishing')"><img src="assets/screenshots/catfishing.jpg" alt="Cat Fishing 2 mobile game screenshot, Unity game for cat lovers" loading="lazy"></div><div class="app-icon"><img src="assets/logos/catfishing.jpg" alt="Cat Fishing 2 app icon" loading="lazy"></div><div class="app-name">Cat Fishing 2</div><div class="app-tech">Unity &middot; C#</div><div class="app-desc"><span data-lang="en">Addictive mobile game for cat lovers built with Unity, guide your cat to catch fish on screen.</span><span data-lang="id">Game mobile adiktif untuk pecinta kucing yang dibuat dengan Unity, pandu kucingmu menangkap ikan di layar.</span></div><a href="https://apps.apple.com/us/app/cat-fishing-2/id494384429" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('petparade')"><img src="assets/screenshots/thumb/petparade.webp" alt="Pet Parade iOS app screenshot, social platform for pet parents" loading="lazy"></div><div class="app-icon"><img src="assets/logos/petparade.png" alt="Pet Parade app icon" loading="lazy"></div><div class="app-name">Pet Parade</div><div class="app-tech">Swift &middot; UIKit</div><div class="app-desc"><span data-lang="en">Social platform for pet businesses and pet parents, powered by Patent-pending Pet Demographics&#174; Audience Platform.</span><span data-lang="id">Platform sosial untuk bisnis hewan peliharaan dan pemilik hewan, didukung oleh Pet Demographics&#174; Audience Platform.</span></div><a href="https://apps.apple.com/gb/app/pet-parade-cutest-pet-game/id1144089495" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('catfishing')"><img src="assets/screenshots/thumb/catfishing.webp" alt="Cat Fishing 2 mobile game screenshot, Unity game for cat lovers" loading="lazy"></div><div class="app-icon"><img src="assets/logos/catfishing.jpg" alt="Cat Fishing 2 app icon" loading="lazy"></div><div class="app-name">Cat Fishing 2</div><div class="app-tech">Unity &middot; C#</div><div class="app-desc"><span data-lang="en">Addictive mobile game for cat lovers built with Unity, guide your cat to catch fish on screen.</span><span data-lang="id">Game mobile adiktif untuk pecinta kucing yang dibuat dengan Unity, pandu kucingmu menangkap ikan di layar.</span></div><a href="https://apps.apple.com/us/app/cat-fishing-2/id494384429" target="_blank" class="app-link">App Store &#8599;</a></div>
     </div>
   </div>
   <div class="employer-group">
     <div class="employer-header"><span class="employer-name">Ask-Fast</span><span class="employer-sep"></span><span class="employer-period">Jan 2017 - Sep 2019</span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('askfast')"><img src="assets/screenshots/askfast.jpg" alt="Ask-Fast iOS app screenshot" loading="lazy"></div><div class="app-icon"><img src="assets/logos/askfast.jpg" alt="Ask-Fast app icon" loading="lazy"></div><div class="app-name">Ask-Fast</div><div class="app-tech">Swift &middot; Objective-C</div><div class="app-desc"><span data-lang="en">One of 4 iOS products developed at Ask-Fast. App has since been unpublished.</span><span data-lang="id">Salah satu dari 4 produk iOS yang dikembangkan di Ask-Fast. Aplikasi telah diturunkan dari App Store.</span></div><a href="https://www.linkedin.com/company/ask-fast/posts/?feedView=all" target="_blank" class="app-link">LinkedIn &#8599;</a></div>
-      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('teamtelefoon')"><img src="assets/screenshots/teamtelefoon.jpg" alt="TeamTelefoon iOS app screenshot, team phone management for business" loading="lazy"></div><div class="app-icon"><img src="assets/logos/teamtelefoon.png" alt="TeamTelefoon app icon" loading="lazy"></div><div class="app-name">TeamTelefoon</div><div class="app-tech">Swift &middot; UIKit</div><div class="app-desc"><span data-lang="en">Team phone management app for businesses, streamlining internal calls and contact management.</span><span data-lang="id">Aplikasi manajemen telepon tim untuk bisnis, menyederhanakan panggilan internal dan manajemen kontak.</span></div><a href="https://apps.apple.com/be/app/teamtelefoon/id1354423903" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('askfast')"><img src="assets/screenshots/thumb/askfast.webp" alt="Ask-Fast iOS app screenshot" loading="lazy"></div><div class="app-icon"><img src="assets/logos/askfast.jpg" alt="Ask-Fast app icon" loading="lazy"></div><div class="app-name">Ask-Fast</div><div class="app-tech">Swift &middot; Objective-C</div><div class="app-desc"><span data-lang="en">One of 4 iOS products developed at Ask-Fast. App has since been unpublished.</span><span data-lang="id">Salah satu dari 4 produk iOS yang dikembangkan di Ask-Fast. Aplikasi telah diturunkan dari App Store.</span></div><a href="https://www.linkedin.com/company/ask-fast/posts/?feedView=all" target="_blank" class="app-link">LinkedIn &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('teamtelefoon')"><img src="assets/screenshots/thumb/teamtelefoon.webp" alt="TeamTelefoon iOS app screenshot, team phone management for business" loading="lazy"></div><div class="app-icon"><img src="assets/logos/teamtelefoon.png" alt="TeamTelefoon app icon" loading="lazy"></div><div class="app-name">TeamTelefoon</div><div class="app-tech">Swift &middot; UIKit</div><div class="app-desc"><span data-lang="en">Team phone management app for businesses, streamlining internal calls and contact management.</span><span data-lang="id">Aplikasi manajemen telepon tim untuk bisnis, menyederhanakan panggilan internal dan manajemen kontak.</span></div><a href="https://apps.apple.com/be/app/teamtelefoon/id1354423903" target="_blank" class="app-link">App Store &#8599;</a></div>
     </div>
   </div>
   <div class="employer-group">
     <div class="employer-header"><span class="employer-name"><span data-lang="en">Personal Projects</span><span data-lang="id">Proyek Pribadi</span></span></div>
     <div class="apps-row">
-      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('schoolryde')"><img src="assets/screenshots/schoolryde.jpg" alt="SchoolRyde iOS app screenshot, school transport with real-time tracking" loading="lazy"></div><div class="app-icon"><img src="assets/logos/schoolryde.png" alt="SchoolRyde app icon" loading="lazy"></div><div class="app-name">SchoolRyde</div><div class="app-tech">Swift &middot; SwiftUI</div><div class="app-desc"><span data-lang="en">School transportation app with real-time tracking, keeping parents informed and children safe.</span><span data-lang="id">Aplikasi transportasi sekolah dengan pelacakan real-time, menjaga orang tua terinformasi dan anak-anak tetap aman.</span></div><a href="https://apps.apple.com/us/app/schoolryde/id6738888710" target="_blank" class="app-link">App Store &#8599;</a></div>
-      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('nantiaja')"><img src="assets/screenshots/nantiaja.jpg" alt="NantiAja iOS app screenshot, upcoming app in development" loading="lazy"></div><div class="app-icon"><img src="assets/logos/nantiaja.jpg" alt="NantiAja app icon" loading="lazy"></div><div class="app-name">NantiAja</div><div class="app-tech">Swift &middot; SwiftUI</div><div class="app-desc"><span data-lang="en">Upcoming iOS app in development. Follow along on Instagram for updates.</span><span data-lang="id">Aplikasi iOS yang sedang dalam pengembangan. Ikuti terus di Instagram untuk pembaruan.</span></div><a href="https://www.instagram.com/nantiajaid/" target="_blank" class="app-link">Instagram &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('schoolryde')"><img src="assets/screenshots/thumb/schoolryde.webp" alt="SchoolRyde iOS app screenshot, school transport with real-time tracking" loading="lazy"></div><div class="app-icon"><img src="assets/logos/schoolryde.png" alt="SchoolRyde app icon" loading="lazy"></div><div class="app-name">SchoolRyde</div><div class="app-tech">Swift &middot; SwiftUI</div><div class="app-desc"><span data-lang="en">School transportation app with real-time tracking, keeping parents informed and children safe.</span><span data-lang="id">Aplikasi transportasi sekolah dengan pelacakan real-time, menjaga orang tua terinformasi dan anak-anak tetap aman.</span></div><a href="https://apps.apple.com/us/app/schoolryde/id6738888710" target="_blank" class="app-link">App Store &#8599;</a></div>
+      <div class="portfolio-card"><div class="app-screenshot" onclick="openLightbox('nantiaja')"><img src="assets/screenshots/thumb/nantiaja.webp" alt="NantiAja iOS app screenshot, upcoming app in development" loading="lazy"></div><div class="app-icon"><img src="assets/logos/nantiaja.jpg" alt="NantiAja app icon" loading="lazy"></div><div class="app-name">NantiAja</div><div class="app-tech">Swift &middot; SwiftUI</div><div class="app-desc"><span data-lang="en">Upcoming iOS app in development. Follow along on Instagram for updates.</span><span data-lang="id">Aplikasi iOS yang sedang dalam pengembangan. Ikuti terus di Instagram untuk pembaruan.</span></div><a href="https://www.instagram.com/nantiajaid/" target="_blank" class="app-link">Instagram &#8599;</a></div>
     </div>
   </div>
 </section></div>
@@ -743,19 +751,25 @@
   // HERO VIDEO, one <video> whose source follows the active theme, so only the
   // matching 2.5MB render is ever downloaded. Skipped entirely on Save-Data.
   const heroVideo = document.getElementById("heroVideo");
-  const saveData = navigator.connection && navigator.connection.saveData === true;
+  // Skip the ~1MB download on Save-Data or a slow link; the poster still shows the
+  // settled composition, so the hero looks complete either way.
+  const conn = navigator.connection;
+  const slowLink = !!conn && (conn.saveData === true || /^(slow-2g|2g|3g)$/.test(conn.effectiveType || ""));
   // MP4 only: VP9/WebM was measured and rejected — for the dark render it came out
   // both larger and lower quality than x264, so it was not worth the extra files.
   function syncHeroVideo() {
-    if (!heroVideo || saveData) return;
+    if (!heroVideo) return;
     const theme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
     const file = "assets/video/" + theme + "_video.mp4";
+    // The poster is set even when the video is skipped, so a slow connection still
+    // gets the full composition rather than an empty gradient.
+    heroVideo.setAttribute("poster", "assets/video/poster-" + theme + ".jpg");
+    heroVideo.classList.add("is-ready");
+    if (slowLink) return;
     // Bail if the right render is already playing, a redundant toggle shouldn't restart the loop.
     if (heroVideo.getAttribute("src") === file) return;
     heroVideo.classList.remove("is-ready");
     heroVideo.muted = true;               // Safari needs the property, not just the attribute
-    // Poster first so it paints while the video streams in.
-    heroVideo.setAttribute("poster", "assets/video/poster-" + theme + ".jpg");
     heroVideo.setAttribute("src", file);
     heroVideo.load();
     // Autoplay is refused on iOS Low Power Mode, degrade to the poster, don't throw.
@@ -843,7 +857,14 @@
 
   // Loader fade out. Deliberately NOT tied to window "load", the 2.5MB hero video
   // can delay that event and leave visitors staring at a spinner.
-  const hideLoader = () => document.getElementById("pageLoader").classList.add("hidden");
+  const hideLoader = () => {
+    const el = document.getElementById("pageLoader");
+    if (el.classList.contains("hidden")) return;
+    el.classList.add("hidden");
+    // Flip visibility only after the fade, so it never animates.
+    el.addEventListener("transitionend", () => el.classList.add("gone"), { once: true });
+    setTimeout(() => el.classList.add("gone"), 600);  // in case transitionend doesn't fire
+  };
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => setTimeout(hideLoader, 200));
   } else {
@@ -935,19 +956,19 @@
 
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="App screenshot preview" onclick="closeLightbox(event)">
   <button class="lightbox-close" aria-label="Close preview" onclick="closeLightbox(event)">×</button>
-  <img id="lightbox-img" src="" alt="Enlarged app screenshot">
+  <img id="lightbox-img" src="" alt="Enlarged app screenshot" width="1100" height="590" decoding="async">
 </div>
 
 <script>
   const screenshots = {
-    "askfast": "assets/screenshots/askfast.jpg",
-    "catfishing": "assets/screenshots/catfishing.jpg",
-    "empatkali": "assets/screenshots/empatkali.jpg",
-    "myxl": "assets/screenshots/myxl.jpg",
-    "nantiaja": "assets/screenshots/nantiaja.jpg",
-    "petparade": "assets/screenshots/petparade.jpg",
-    "schoolryde": "assets/screenshots/schoolryde.jpg",
-    "teamtelefoon": "assets/screenshots/teamtelefoon.jpg"
+    "askfast": "assets/screenshots/askfast.webp",
+    "catfishing": "assets/screenshots/catfishing.webp",
+    "empatkali": "assets/screenshots/empatkali.webp",
+    "myxl": "assets/screenshots/myxl.webp",
+    "nantiaja": "assets/screenshots/nantiaja.webp",
+    "petparade": "assets/screenshots/petparade.webp",
+    "schoolryde": "assets/screenshots/schoolryde.webp",
+    "teamtelefoon": "assets/screenshots/teamtelefoon.webp"
   };
   let lastFocused = null;
   function openLightbox(key) {
