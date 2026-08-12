@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found — Rian Erlangga Saputra</title>
+<meta name="robots" content="noindex, follow">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzAwNzFFMyIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9Ii1hcHBsZS1zeXN0ZW0sSGVsdmV0aWNhIE5ldWUsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPiZsdDsvJmd0OzwvdGV4dD48L3N2Zz4=">
+<meta name="theme-color" content="#0071E3">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root, [data-theme="dark"] {
+    --bg: #000000; --apple-blue: #0071E3; --apple-blue-hover: #0077ED;
+    --text-primary: #F5F5F7; --text-secondary: #AEAEB2;
+    --glass-bg: rgba(255,255,255,0.045); --glass-border: rgba(255,255,255,0.10);
+    --glass-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07);
+    --glow-1: rgba(0,113,227,0.22); --glow-2: rgba(90,200,250,0.10);
+  }
+  [data-theme="light"] {
+    --bg: #FFFFFF; --text-primary: #1D1D1F; --text-secondary: #6E6E73;
+    --glass-bg: rgba(255,255,255,0.62); --glass-border: rgba(0,0,0,0.07);
+    --glass-shadow: 0 8px 32px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
+    --glow-1: rgba(0,113,227,0.12); --glow-2: rgba(90,200,250,0.08);
+  }
+  body {
+    font-family: -apple-system, "SF Pro Display", "Inter", "Helvetica Neue", sans-serif;
+    background: var(--bg); color: var(--text-primary); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100svh; display: flex; align-items: center; justify-content: center;
+    padding: 2rem; position: relative; overflow: hidden;
+  }
+  body::before {
+    content: ""; position: absolute; inset: -20%; z-index: 0; pointer-events: none;
+    background: radial-gradient(circle at 68% 32%, var(--glow-1), transparent 42%),
+                radial-gradient(circle at 12% 78%, var(--glow-2), transparent 46%);
+  }
+  .card {
+    position: relative; z-index: 1; text-align: center; max-width: 460px; width: 100%;
+    padding: 3rem 2.5rem; border-radius: 22px;
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%);
+    box-shadow: var(--glass-shadow);
+  }
+  .code { font-size: 11px; font-weight: 500; color: var(--apple-blue); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 0.75rem; }
+  p { font-size: 15px; font-weight: 300; color: var(--text-secondary); margin-bottom: 2rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 11px 22px;
+    font-size: 13px; text-decoration: none; border-radius: 980px;
+    background: var(--apple-blue); color: #fff;
+    box-shadow: 0 6px 24px -6px rgba(0,113,227,0.6);
+    transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:hover { background: var(--apple-blue-hover); transform: translateY(-2px); box-shadow: 0 10px 32px -6px rgba(0,113,227,0.75); }
+  :focus-visible { outline: 2px solid var(--apple-blue); outline-offset: 3px; border-radius: 4px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: 0.001ms !important; }
+    .btn:hover { transform: none; }
+  }
+</style>
+<script>
+  // Match index.html: apply the saved/system theme before first paint
+  (function() {
+    const t = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", t);
+  })();
+</script>
+</head>
+<body>
+  <div class="card">
+    <p class="code">Error 404</p>
+    <h1>This page doesn&#8217;t exist</h1>
+    <p>The link may be broken or the page may have moved. Let&#8217;s get you back to the portfolio.</p>
+    <a class="btn" href="/">&#8592;&nbsp; Back to home</a>
+  </div>
+</body>
+</html>

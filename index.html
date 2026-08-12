@@ -119,6 +119,8 @@
 }
 </script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -165,13 +167,30 @@
     --ambient-glow: rgba(0,113,227,0.055);
   }
   html { scroll-behavior: smooth; }
+  /* Keyboard focus ring — the site previously had no visible focus indicator at all. */
+  :focus-visible { outline: 2px solid var(--apple-blue); outline-offset: 3px; border-radius: 4px; }
+  .skip-link { position: absolute; left: 50%; top: 0; transform: translate(-50%, -120%); z-index: 200; background: var(--apple-blue); color: #fff; padding: 10px 18px; border-radius: 0 0 10px 10px; font-size: 13px; text-decoration: none; transition: transform 0.18s ease; }
+  .skip-link:focus { transform: translate(-50%, 0); }
   body { font-family: -apple-system, "SF Pro Display", "Inter", "Helvetica Neue", sans-serif; background: var(--bg); color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; transition: background 0.3s ease, color 0.3s ease; }
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 52px; background: var(--nav-bg); backdrop-filter: saturate(180%) blur(24px); -webkit-backdrop-filter: saturate(180%) blur(24px); border-bottom: 1px solid transparent; transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; }
   nav.scrolled { border-bottom-color: var(--border); box-shadow: var(--nav-shadow); }
   .nav-links { display: flex; gap: 2rem; }
-  .nav-links a { font-size: 13px; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
+  .nav-links a { position: relative; font-size: 13px; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
   .nav-links a:hover { color: var(--text-primary); }
+  /* Active section indicator, driven by the scroll-spy observer */
+  .nav-links a.is-active { color: var(--text-primary); }
+  .nav-links a.is-active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px; background: var(--apple-blue); }
   .nav-right { display: flex; align-items: center; gap: 1rem; }
+  /* Hamburger — only rendered on narrow screens (see the 720px query) */
+  .nav-toggle { display: none; width: 34px; height: 34px; align-items: center; justify-content: center; background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 8px; cursor: pointer; color: var(--toggle-icon); transition: all 0.15s; }
+  .nav-toggle:hover { color: var(--toggle-hover); background: var(--glass-bg-hover); }
+  .nav-toggle span { display: block; position: relative; width: 15px; height: 1.5px; border-radius: 2px; background: currentColor; transition: transform 0.28s ease, opacity 0.2s ease; }
+  .nav-toggle span::before, .nav-toggle span::after { content: ""; position: absolute; left: 0; width: 100%; height: 100%; border-radius: 2px; background: currentColor; transition: transform 0.28s ease; }
+  .nav-toggle span::before { transform: translateY(-5px); }
+  .nav-toggle span::after { transform: translateY(5px); }
+  .nav-open .nav-toggle span { background: transparent; }
+  .nav-open .nav-toggle span::before { transform: translateY(0) rotate(45deg); }
+  .nav-open .nav-toggle span::after { transform: translateY(0) rotate(-45deg); }
   .theme-toggle { position: relative; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: 8px; cursor: pointer; color: var(--toggle-icon); transition: all 0.15s; }
   .theme-toggle:hover { color: var(--toggle-hover); background: var(--glass-bg-hover); }
   .theme-toggle:active { transform: scale(0.94); }
@@ -255,12 +274,19 @@
   .app-desc { font-size: 13px; font-weight: 300; color: var(--text-secondary); line-height: 1.7; flex: 1; margin-bottom: 1rem; }
   .app-link { font-size: 12px; color: var(--apple-blue); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: opacity 0.15s; }
   .app-link:hover { opacity: 0.75; }
-  .exp-list { display: flex; flex-direction: column; }
-  .exp-item { display: grid; grid-template-columns: 150px 1fr; gap: 0 2rem; padding: 1.75rem 0; border-bottom: 1px solid var(--border); position: relative; }
-  .exp-item::after { content: ""; position: absolute; left: 145px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+  /* Timeline reads as a sequence of glass cards strung on a rail, matching the
+     skill/portfolio cards rather than the old flat bottom-border list. */
+  /* Timeline reads as glass cards strung on a rail. The rail sits in the list's
+     left padding, outside the cards, so it never shows through the translucent fill.
+     Geometry: list padding-left 34px, rail at 9px, dot 9px wide at item -29px
+     => both centre on 9.5px. Keep these in sync if any one value changes. */
+  .exp-list { display: flex; flex-direction: column; gap: 0.9rem; position: relative; padding-left: 34px; }
+  .exp-list::before { content: ""; position: absolute; left: 9px; top: 14px; bottom: 14px; width: 1px; background: var(--border); }
+  .exp-item { display: grid; grid-template-columns: 118px 1fr; gap: 0 2.4rem; padding: 1.5rem; position: relative; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); box-shadow: var(--glass-shadow); transition: background 0.2s, box-shadow 0.25s ease, transform 0.25s ease; }
+  .exp-item:hover { background: var(--glass-bg-hover); transform: translateY(-3px); box-shadow: var(--glow-blue); }
   .exp-period { font-size: 11px; color: var(--text-tertiary); padding-top: 2px; line-height: 1.6; }
-  .exp-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--surface-3); border: 1px solid var(--border-light); position: absolute; left: 143px; top: 2.1rem; }
-  .exp-current .exp-dot { background: var(--apple-blue); border-color: var(--apple-blue); }
+  .exp-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--surface-3); border: 1px solid var(--border-light); position: absolute; left: -29px; top: 1.9rem; z-index: 1; }
+  .exp-current .exp-dot { background: var(--apple-blue); border-color: var(--apple-blue); box-shadow: 0 0 0 4px rgba(0,113,227,0.18); }
   .exp-role { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
   .exp-company { font-size: 12px; color: var(--apple-blue); margin-bottom: 0.6rem; }
   .exp-desc { font-size: 13px; font-weight: 300; color: var(--text-secondary); line-height: 1.7; }
@@ -287,17 +313,49 @@
     [data-theme="light"] .hero-scrim { background: linear-gradient(rgba(255,255,255,0.68), rgba(255,255,255,0.78)), var(--hero-scrim-bottom); }
   }
   @media (max-width: 720px) {
-    .nav-links { display: none; }
     .nav-right { gap: 0.6rem; }
     .lang-btn { padding: 5px 10px; font-size: 11px; }
     .theme-toggle { width: 32px; height: 32px; }
+    .nav-toggle { display: flex; }
+    /* The panel is a sibling of .nav-right inside nav, so it needs to stay below the
+       controls in paint order — otherwise it covers its own close button. */
+    .nav-right { position: relative; z-index: 100; }
+    /* nav's backdrop-filter makes it a containing block for position:fixed children,
+       which would size the panel to the 52px bar instead of the viewport. Drop it
+       while the menu is open — the panel supplies its own blur. */
+    .nav-open nav { backdrop-filter: none; -webkit-backdrop-filter: none; background: transparent; border-bottom-color: transparent; box-shadow: none; }
+    /* The same #navLinks element becomes a full-screen frosted panel — no duplicated
+       markup, so the bilingual data-lang spans stay single-sourced. */
+    .nav-links {
+      position: fixed; inset: 0; z-index: 99;
+      flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;
+      background: var(--nav-bg);
+      backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.28s ease, visibility 0.28s ease;
+    }
+    .nav-open .nav-links { opacity: 1; visibility: visible; pointer-events: auto; }
+    .nav-links a {
+      font-size: 24px; font-weight: 500; color: var(--text-primary);
+      padding: 14px 28px; letter-spacing: -0.01em;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .nav-open .nav-links a { opacity: 1; transform: translateY(0); }
+    .nav-open .nav-links a:nth-child(1) { transition-delay: 0.06s; }
+    .nav-open .nav-links a:nth-child(2) { transition-delay: 0.10s; }
+    .nav-open .nav-links a:nth-child(3) { transition-delay: 0.14s; }
+    .nav-open .nav-links a:nth-child(4) { transition-delay: 0.18s; }
+    .nav-links a.is-active::after { left: 28px; right: 28px; bottom: 6px; }
   }
   @media (max-width: 640px) {
     nav { padding: 0 1.25rem; }
     .hero-inner, section { padding-left: 1.25rem; padding-right: 1.25rem; }
     footer { padding: 1.5rem 1.25rem; }
+    /* Drop the rail on phones — the cards alone carry the sequence. */
+    .exp-list { padding-left: 0; }
+    .exp-list::before, .exp-dot { display: none; }
     .exp-item { grid-template-columns: 1fr; }
-    .exp-item::after, .exp-dot { display: none; }
     .exp-period { margin-bottom: 4px; }
     .skills-grid { grid-template-columns: 1fr; }
   }
@@ -465,12 +523,14 @@
       transition-duration: 0.001ms !important;
     }
     .photo-wrap:hover, .photo-wrap:hover img,
-    .skill-card:hover, .portfolio-card:hover,
+    .skill-card:hover, .portfolio-card:hover, .exp-item:hover,
     .tech-item:hover, .app-screenshot:hover,
     .social-link:hover, .btn-primary:hover, .btn-outline:hover,
     .app-screenshot:hover img,
     .btn:active, .social-link:active, .tech-item:active,
     .app-screenshot:active, .theme-toggle:active { transform: none; }
+    /* Mobile menu appears without sliding or staggering */
+    .nav-links a { opacity: 1 !important; transform: none !important; transition-delay: 0s !important; }
   }
 
 </style>
@@ -489,22 +549,25 @@
 <!-- SEO keywords (screen-reader & crawler accessible) -->
 <span class="seo-keywords">iOS developer Indonesia, iOS developer Jakarta, iOS developer Jakarta freelance, iOS developer Bandung, iOS developer Bandung freelance, Rian Erlangga Saputra iOS developer, Swift developer Indonesia, freelance mobile developer Jakarta</span>
 
+<a class="skip-link" href="#main"><span data-lang="en">Skip to content</span><span data-lang="id">Lompat ke konten</span></a>
+
 <nav>
-  <div class="nav-links">
+  <div class="nav-links" id="navLinks">
     <a href="#skills"><span data-lang="en">Skills</span><span data-lang="id">Keahlian</span></a>
     <a href="#work"><span data-lang="en">Work</span><span data-lang="id">Portofolio</span></a>
     <a href="#experience"><span data-lang="en">Experience</span><span data-lang="id">Pengalaman</span></a>
     <a href="#contact"><span data-lang="en">Contact</span><span data-lang="id">Kontak</span></a>
   </div>
   <div class="nav-right">
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle dark mode" aria-pressed="true">
       <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       <svg class="icon-sun" viewBox="0 0 24 24"><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.929zm13.021 13.021l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zM1 11h3v2H1v-2zm19 0h3v2h-3v-2zM4.929 20.485l-1.414-1.414 2.121-2.121 1.414 1.414-2.121 2.121zm13.021-13.021L16.536 6.05l2.121-2.121 1.414 1.414-2.121 2.121z"/></svg>
     </button>
-    <div class="lang-toggle">
-      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" id="btn-id" onclick="setLang('id')">ID</button>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')" aria-pressed="true" lang="en">EN</button>
+      <button class="lang-btn" id="btn-id" onclick="setLang('id')" aria-pressed="false" lang="id">ID</button>
     </div>
+    <button class="nav-toggle" id="navToggle" onclick="toggleNav()" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><span></span></button>
   </div>
 </nav>
 
@@ -550,6 +613,7 @@
   </div>
 </section>
 
+<main id="main">
 <div class="section-wrap"><section id="skills">
   <h2 class="section-title"><span data-lang="en">Built for Apple&#8217;s ecosystem</span><span data-lang="id">Dibangun untuk ekosistem Apple</span></h2>
   <p class="section-subtitle"><span data-lang="en">9 years deep in Swift, UIKit, and everything in between.</span><span data-lang="id">9 tahun mendalami Swift, UIKit, dan seluruh ekosistemnya.</span></p>
@@ -667,6 +731,7 @@
     </div>
   </div>
 </section></div>
+</main>
 
 <footer>
   <span class="footer-copy">&#169; <span id="footer-year">2025</span> Rian Erlangga Saputra &middot; iOS Developer Jakarta, Indonesia</span>
@@ -679,17 +744,21 @@
   // matching 2.5MB render is ever downloaded. Skipped entirely on Save-Data.
   const heroVideo = document.getElementById("heroVideo");
   const saveData = navigator.connection && navigator.connection.saveData === true;
+  // MP4 only: VP9/WebM was measured and rejected — for the dark render it came out
+  // both larger and lower quality than x264, so it was not worth the extra files.
   function syncHeroVideo() {
     if (!heroVideo || saveData) return;
-    const file = document.documentElement.getAttribute("data-theme") === "light"
-      ? "assets/video/light_video.mp4" : "assets/video/dark_video.mp4";
+    const theme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+    const file = "assets/video/" + theme + "_video.mp4";
     // Bail if the right render is already playing, a redundant toggle shouldn't restart the loop.
     if (heroVideo.getAttribute("src") === file) return;
     heroVideo.classList.remove("is-ready");
     heroVideo.muted = true;               // Safari needs the property, not just the attribute
+    // Poster first so it paints while the video streams in.
+    heroVideo.setAttribute("poster", "assets/video/poster-" + theme + ".jpg");
     heroVideo.setAttribute("src", file);
     heroVideo.load();
-    // Autoplay is refused on iOS Low Power Mode, degrade to the bloom background, don't throw.
+    // Autoplay is refused on iOS Low Power Mode, degrade to the poster, don't throw.
     const playback = heroVideo.play();
     if (playback && typeof playback.catch === "function") playback.catch(() => {});
   }
@@ -705,20 +774,49 @@
     const isDark = html.getAttribute("data-theme") === "dark";
     html.setAttribute("data-theme", isDark ? "light" : "dark");
     localStorage.setItem("theme", isDark ? "light" : "dark");
+    document.querySelector(".theme-toggle").setAttribute("aria-pressed", String(isDark ? false : true));
     syncHeroVideo();
   }
   function setLang(lang) {
-    document.body.className = "lang-" + lang;
+    // classList (not className) so this never clobbers state classes like .nav-open
+    document.body.classList.remove("lang-en", "lang-id");
+    document.body.classList.add("lang-" + lang);
+    document.documentElement.lang = lang;   // screen readers pick the right pronunciation
     document.getElementById("btn-en").classList.toggle("active", lang === "en");
     document.getElementById("btn-id").classList.toggle("active", lang === "id");
+    document.getElementById("btn-en").setAttribute("aria-pressed", String(lang === "en"));
+    document.getElementById("btn-id").setAttribute("aria-pressed", String(lang === "id"));
     localStorage.setItem("lang", lang);
   }
-  // Theme: respect system preference if user hasn't manually toggled
-  const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const savedTheme = localStorage.getItem("theme") || (systemPrefersDark ? "dark" : "light");
-  const savedLang = localStorage.getItem("lang") || "en";
-  document.documentElement.setAttribute("data-theme", savedTheme);
-  if (savedLang === "id") setLang("id");
+
+  // MOBILE NAV — the same #navLinks element becomes a full-screen panel via CSS.
+  const navToggleBtn = document.getElementById("navToggle");
+  const navLinksEl = document.getElementById("navLinks");
+  function setNav(open) {
+    document.body.classList.toggle("nav-open", open);
+    navToggleBtn.setAttribute("aria-expanded", String(open));
+    document.body.style.overflow = open ? "hidden" : "";
+    if (open) navLinksEl.querySelector("a").focus();
+    else navToggleBtn.focus();
+  }
+  function toggleNav() { setNav(!document.body.classList.contains("nav-open")); }
+  const navIsOpen = () => document.body.classList.contains("nav-open");
+  navLinksEl.addEventListener("click", e => { if (e.target.closest("a") && navIsOpen()) setNav(false); });
+  window.addEventListener("resize", () => { if (navIsOpen() && window.innerWidth > 720) setNav(false); });
+  // Keep Tab inside the open panel
+  navLinksEl.addEventListener("keydown", e => {
+    if (e.key !== "Tab" || !navIsOpen()) return;
+    const items = [...navLinksEl.querySelectorAll("a"), navToggleBtn];
+    const first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  // The inline <head> script already applied the saved/system theme to avoid a flash;
+  // read it back rather than recomputing, and only wire up the language here.
+  const savedTheme = document.documentElement.getAttribute("data-theme");
+  document.querySelector(".theme-toggle").setAttribute("aria-pressed", String(savedTheme === "dark"));
+  setLang(localStorage.getItem("lang") || "en");
   syncHeroVideo();
   // Listen for system theme changes (only if user hasn't manually picked)
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
@@ -763,6 +861,44 @@
     ([entry]) => navBar.classList.toggle("scrolled", !entry.isIntersecting),
     { threshold: 0 }
   ).observe(navSentinel);
+
+  // Scroll spy — highlight the nav link for the section currently in view.
+  // Observer-based to match the sentinel above; no per-frame scroll work.
+  const spyLinks = new Map();
+  document.querySelectorAll(".nav-links a[href^='#']").forEach(a => {
+    const target = document.querySelector(a.getAttribute("href"));
+    if (target) spyLinks.set(target, a);
+  });
+  if (spyLinks.size) {
+    const visible = new Set();
+    const paintActive = () => {
+      const bandTop = 53;  // just below the fixed 52px nav
+      // The winner is the section that most recently crossed the top of the band.
+      // Comparing raw `top` would let an already-scrolled-past section (large
+      // negative top) win forever, so only consider ones that have crossed and
+      // take the greatest — i.e. the latest to do so.
+      let winner = null, winnerTop = -Infinity;
+      spyLinks.forEach((_, section) => {
+        if (!visible.has(section)) return;
+        const top = section.getBoundingClientRect().top;
+        if (top <= bandTop && top > winnerTop) { winner = section; winnerTop = top; }
+      });
+      if (!winner) {  // nothing has crossed yet — highlight the nearest one below
+        let best = Infinity;
+        spyLinks.forEach((_, section) => {
+          if (!visible.has(section)) return;
+          const top = section.getBoundingClientRect().top;
+          if (top < best) { best = top; winner = section; }
+        });
+      }
+      spyLinks.forEach((link, section) => link.classList.toggle("is-active", section === winner));
+    };
+    const spyObs = new IntersectionObserver(entries => {
+      entries.forEach(e => e.isIntersecting ? visible.add(e.target) : visible.delete(e.target));
+      paintActive();
+    }, { rootMargin: "-52px 0px -55% 0px", threshold: 0 });
+    spyLinks.forEach((_, section) => spyObs.observe(section));
+  }
 
   // Dynamic footer year
   const yearEl = document.getElementById("footer-year");
@@ -835,13 +971,22 @@
     }
   }
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') hideLightbox();
+    if (e.key !== 'Escape') return;
+    if (document.getElementById('lightbox').classList.contains('active')) hideLightbox();
+    else if (document.body.classList.contains('nav-open')) setNav(false);
+  });
+  // Keep Tab inside the open lightbox — it has a single focusable control,
+  // so hold focus there rather than letting Tab walk into the page behind.
+  document.getElementById('lightbox').addEventListener('keydown', e => {
+    if (e.key === 'Tab') { e.preventDefault(); document.querySelector('.lightbox-close').focus(); }
   });
   // Make screenshot thumbnails keyboard-accessible
   document.querySelectorAll('.app-screenshot[onclick]').forEach(el => {
     el.setAttribute('tabindex', '0');
     el.setAttribute('role', 'button');
-    el.setAttribute('aria-label', 'View app screenshot');
+    // Name each button after its app so screen readers don't announce eight identical controls
+    const appName = el.closest('.portfolio-card')?.querySelector('.app-name')?.textContent.trim();
+    el.setAttribute('aria-label', appName ? 'View ' + appName + ' screenshot' : 'View app screenshot');
     el.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
     });
