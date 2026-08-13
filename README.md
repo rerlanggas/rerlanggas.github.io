@@ -22,23 +22,45 @@ Personal portfolio website for Rian Erlangga Saputra, Senior iOS Developer based
     ├── photo.webp                  # Profile photo (served); photo.jpg is the master
     ├── logos/                      # 8 app logos
     ├── screenshots/                # 8 masters (.jpg) + full-size .webp for the lightbox
-    │   └── thumb/                  # Small .webp used by the portfolio grid
+    │   └── thumb/                  # One sliced app screen per app, used by the cards
     └── tech/                       # 8 tech stack icons (SVG)
 ```
 
 ## Images
 
-The portfolio grid and the lightbox load different files. The grid uses the small
-`thumb/*.webp`; the full-size `*.webp` is fetched only when a screenshot is
-opened. The `.jpg` files are kept as masters and are never served.
+The `.jpg` files in `assets/screenshots/` are the original **App Store submission
+sheets** — four portrait screens side by side on a light canvas. They are masters
+and are never served.
 
-Regenerate after replacing a master (needs `brew install webp`):
+Two derivatives are served:
+
+- `screenshots/*.webp` — the whole sheet, loaded only when the lightbox opens
+- `screenshots/thumb/*.webp` — **a single screen sliced out of the sheet**, shown
+  on the portfolio card
+
+The card thumbnail is a single screen on purpose. Scaling the whole four-up sheet
+into a small box produced sliced-off phones, white gutter stripes, and the large
+white bands some sheets carry at the bottom.
+
+`tools/slice_screens.py` finds the panels (ffmpeg decodes, the analysis is plain
+Python — no Pillow needed) and records which panel each app uses:
+
+```sh
+python3 tools/slice_screens.py detect      # list detected panels per sheet
+python3 tools/slice_screens.py candidates  # write every panel to /tmp/panels to review
+python3 tools/slice_screens.py build       # write the chosen thumbnails
+```
+
+After replacing a master, run `detect`, then `candidates`, **look at the panels**,
+update the `CHOICE` map at the top of the script, and run `build`. Panels flagged
+`CLIPPED` touch the canvas edge and are usually cut off in the master — though a
+panel that legitimately starts at x=0 is flagged too, so confirm by eye.
+
+The lightbox copies and the profile photo are plain conversions:
 
 ```sh
 for f in assets/screenshots/*.jpg; do
-  b=$(basename "$f" .jpg)
-  cwebp -q 78 -resize 1000 0 "$f" -o "assets/screenshots/thumb/$b.webp"   # grid
-  cwebp -q 82            "$f" -o "assets/screenshots/$b.webp"             # lightbox
+  cwebp -q 82 "$f" -o "assets/screenshots/$(basename "$f" .jpg).webp"
 done
 cwebp -q 82 -resize 500 0 assets/photo.jpg -o assets/photo.webp
 ```
